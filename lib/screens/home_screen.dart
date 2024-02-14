@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:typing_ms/screens/main_screen.dart';
 import 'package:typing_ms/utils/constant_util.dart';
 import 'package:typing_ms/widgets/button_widget.dart';
 
@@ -33,10 +34,18 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 ButtonWidget(
-                  buttonText: "Lets Type",
+                  buttonText: "Let's Type",
                   buttonWidth: 400,
                   buttonHeight: 105,
-                  clickHandler: () {},
+                  clickHandler: () {
+                    // This will move to main_screen and forget
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainScreen(),
+                      ),
+                    );
+                  },
                 )
               ],
             ),
