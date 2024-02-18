@@ -1,10 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:typing_ms/screens/summary_screen.dart';
 import 'package:typing_ms/utils/constant_util.dart';
 import 'package:typing_ms/utils/helper_util.dart';
 import 'package:typing_ms/widgets/background_widget.dart';
 import 'package:typing_ms/widgets/input_widget.dart';
-import 'package:typing_ms/widgets/timer_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,26 +18,44 @@ class _MainScreenState extends State<MainScreen> {
   // This will be word which user is going to type
   late String mainWord;
   // Stores correct and incorrect count
-  late int correctAns, incorrectAns;
+  late int correctAns, incorrectAns, totalWords;
   // This wil be color of input box which will be dynamic
   late Color typeBoxColor;
   // TextBox controller
   final TextEditingController _wordController = TextEditingController();
+  // Timer vars
+  late Stopwatch _stopwatch;
+  late Timer _timer;
+  late String _stopwatchText;
 
   @override
   void initState() {
-    // For Temp let word = "Burger"
     mainWord = Helper.getWord();
     incorrectAns = 0;
     correctAns = 0;
+    totalWords = 0;
     typeBoxColor = Constant.buttonColor;
+
+    // Timer
+    _stopwatch = Stopwatch()..start();
+    _timer = Timer.periodic(const Duration(milliseconds: 100), _updateTimer);
+    _stopwatchText = '00:00:00';
     super.initState();
+  }
+
+  void _updateTimer(Timer timer) {
+    if (_stopwatch.isRunning) {
+      setState(() {
+        _stopwatchText = Helper.formattedTime(_stopwatch.elapsedMilliseconds);
+      });
+    }
   }
 
   // Method that will check if word typed is correct or not
   void _checkWord(String typedWord) {
     if (typedWord.length == mainWord.length) {
       setState(() {
+        totalWords += Helper.countWords(mainWord);
         typeBoxColor = Colors.green;
         _wordController.clear();
         mainWord = Helper.getWord();
@@ -63,6 +82,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void dispose() {
     _wordController.dispose();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -113,7 +133,13 @@ class _MainScreenState extends State<MainScreen> {
                           ],
                         ),
                         // Timer Widget
-                        const TimerWidget(),
+                        Text(
+                          _stopwatchText,
+                          style: const TextStyle(
+                            fontSize: 64.0,
+                            color: Constant.backColor,
+                          ),
+                        ),
                         // Session Close Button
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -121,11 +147,18 @@ class _MainScreenState extends State<MainScreen> {
                             shape: const CircleBorder(),
                           ),
                           onPressed: () {
-                            // TODO : Navigate to Summary Screen
+                            // Navigate to Summary Screen
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const SummaryScreen(),
+                                builder: (context) => SummaryScreen(
+                                  correctAns: correctAns,
+                                  incorrectAns: incorrectAns,
+                                  speed: Helper.calculateWPM(
+                                          _stopwatchText, totalWords)
+                                      .toString(),
+                                  totalTime: _stopwatchText,
+                                ),
                               ),
                             );
                           },
