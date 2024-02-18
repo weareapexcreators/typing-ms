@@ -1,16 +1,7 @@
-# typing_ms
+#### This is code base for typing master app streams
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[Part - 3](https://youtube.com/live/4mdLqMzi8Yw?feature=share)
+<br/>
+[Part - 2](https://youtube.com/live/eTQLsfWtOvs?feature=share)
+<br/>
+[Part - 1](https://youtube.com/live/bswcmgEBg8s?feature=share)
